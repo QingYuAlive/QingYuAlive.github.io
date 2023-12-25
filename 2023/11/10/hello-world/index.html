@@ -34,7 +34,7 @@
     
     <script class="keep-theme-configurations">
     const KEEP = window.KEEP || {}
-    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"en","path":"search.json"}
+    KEEP.hexo_config = {"hostname":"qingyualive.github.io","root":"/","language":"en","path":"search.json"}
     KEEP.theme_config = {"base_info":{"primary_color":"#6666CC","title":"QingYuAlive's Blog","author":"QingYuAlive","avatar":"/images/mylogo.svg","logo":"/images/mylogo.svg","favicon":"/images/mylogo.svg"},"menu":{"Archives":"/archives","About":"/about"},"first_screen":{"enable":true,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"凡是过往，皆为序章","hitokoto":false},"social_contact":{"enable":true,"links":{"github":"https://github.com/QingYuAlive","weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"facebook":null,"email":"wjiade76@gmail.com"}},"scroll":{"progress_bar":true,"percent":true,"hide_header":true},"home":{"category":false,"tag":false,"announcement":null},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":true,"share":true,"reward":{"enable":false,"img_link":null,"text":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":true,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"jsdelivr"},"pjax":{"enable":false},"footer":{"since":2020,"word_count":false,"icp":{"enable":false,"record_code":null,"url":"https://beian.miit.gov.cn"},"site_deploy":{"enable":false,"provider":"github","url":null},"shields_style":{"enable":false,"custom":[{"link_url":null,"img_url":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","version":"4.0.5"}
     KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
     KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
@@ -235,56 +235,93 @@
                 </div>
 
                 
-                        
-<div class="post-copyright-info-container border-box">
-    <div class="copyright-info-content border-box">
-        <div class="copyright-info-top border-box">
-            <div class="copyright-post-title border-box text-ellipsis">
-                Hello World
-            </div>
+                        .post-copyright-info-container {
+  width 100%
+  margin-top 1rem
+  background var(--background-color-2)
+  border-radius calc(var(--box-border-radius) * 0.6)
 
-            <div class="copyright-post-link border-box text-ellipsis">
-                2023/11/10/hello-world/
-            </div>
-        </div>
-
-        <div class="copyright-info-bottom border-box">
-            <div class="copyright-post-author bottom-item">
-                <div class="type">
-                    Author
-                </div>
-                <div class="content">QingYuAlive</div>
-            </div>
-
-            <div class="post-time bottom-item">
-                <div class="type">
-                    Published
-                </div>
-                <div class="content">2023-11-10 21:39</div>
-            </div>
+  .copyright-info-content {
+    width 100%
+    padding 1.3rem
+    overflow hidden
+    font-size 1rem
 
 
-            <div class="post-license bottom-item">
-                <div class="type">
-                    License
-                </div>
-                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
-                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed">
-                        <i class="fa-brands fa-creative-commons"></i>
-                        <i class="fa-brands fa-creative-commons-by"></i>
-                        <i class="fa-brands fa-creative-commons-nc"></i>
-                        <i class="fa-brands fa-creative-commons-sa"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
+    .copyright-info-top {
+      width 100%
 
-        <i class="copyright-bg fa-solid fa-copyright"></i>
-    </div>
-    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="Copy copyright info" data-tooltip-offset-y="-2px">
-        <i class="fa-solid fa-copy"></i>
-    </div>
-</div>
+      .copyright-post-title {
+        width 100%
+        color var(--text-color-3)
+        font-size 1.1rem
+      }
+
+      .copyright-post-link {
+        width 100%
+        margin-top 0.2rem
+        color var(--text-color-4)
+      }
+    }
+
+
+    .copyright-info-bottom {
+      display flex
+      justify-content flex-start
+      margin-top 1rem
+
+      .bottom-item {
+        z-index $z-index-10
+        margin-right 1.2rem
+
+        .type {
+          color var(--text-color-4)
+        }
+
+        .content {
+          margin-top 0.2rem
+          color var(--text-color-3)
+        }
+      }
+
+
+      .post-license {
+        .content {
+          i {
+            font-size 1.1rem
+          }
+        }
+      }
+    }
+
+    .copyright-bg {
+      position absolute
+      top 50%
+      right 2rem
+      color var(--copyright-icon-bg-color)
+      font-size 14rem
+      transform translateY(-50%)
+
+      +keep-mobile() {
+        font-size 12rem
+      }
+    }
+  }
+
+
+  .copy-copyright-info {
+    position absolute
+    top 0.5rem
+    right 0.5rem
+    box-sizing border-box
+    padding 0.3rem
+    cursor pointer
+
+    i {
+      color var(--text-color-3)
+    }
+  }
+}
 
                 
 
