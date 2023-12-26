@@ -35,7 +35,7 @@
     <script class="keep-theme-configurations">
     const KEEP = window.KEEP || {}
     KEEP.hexo_config = {"hostname":"qingyualive.github.io","root":"/","language":"en","path":"search.json"}
-    KEEP.theme_config = {"base_info":{"primary_color":"#6666CC","title":"QingYuAlive's Blog","author":"QingYuAlive","avatar":"/images/mylogo.svg","logo":"/images/mylogo.svg","favicon":"/images/mylogo.svg"},"menu":{"Archives":"/archives","About":"/about"},"first_screen":{"enable":true,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"凡是过往，皆为序章","hitokoto":false},"social_contact":{"enable":true,"links":{"github":"https://github.com/QingYuAlive","weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"facebook":null,"email":"wjiade76@gmail.com"}},"scroll":{"progress_bar":true,"percent":true,"hide_header":true},"home":{"category":false,"tag":false,"announcement":null},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":true,"share":true,"reward":{"enable":false,"img_link":null,"text":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":true,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"jsdelivr"},"pjax":{"enable":false},"footer":{"since":2020,"word_count":false,"icp":{"enable":false,"record_code":null,"url":"https://beian.miit.gov.cn"},"site_deploy":{"enable":false,"provider":"github","url":null},"shields_style":{"enable":false,"custom":[{"link_url":null,"img_url":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","version":"4.0.5"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#6666CC","title":"QingYuAlive's Blog","author":"QingYuAlive","avatar":"/images/mylogo.svg","logo":"/images/mylogo.svg","favicon":"/images/mylogo.svg"},"menu":{"Archives":"/archives","Tags":"/tags","About":"/about"},"first_screen":{"enable":true,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"凡是过往，皆为序章","hitokoto":false},"social_contact":{"enable":true,"links":{"github":"https://github.com/QingYuAlive","weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"facebook":null,"email":"wjiade76@gmail.com"}},"scroll":{"progress_bar":true,"percent":true,"hide_header":true},"home":{"category":false,"tag":true,"announcement":null},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":true,"share":true,"reward":{"enable":false,"img_link":null,"text":null}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"obsidian"},"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":true,"use":"valine","valine":{"appid":"TC37mjsdjXyk3rdyl2EZsFiq-gzGzoHsz","appkey":"0RCj0mbuzdiIq7WFtiYEdc9y","server_urls":"https://tc37mjsd.lc-cn-n1-shared.com","placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":"https://ky93mofp.api.lncldglobal.com","reaction":true,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"jsdelivr"},"pjax":{"enable":false},"footer":{"since":2020,"word_count":false,"icp":{"enable":false,"record_code":null,"url":"https://beian.miit.gov.cn"},"site_deploy":{"enable":false,"provider":"github","url":null},"shields_style":{"enable":false,"custom":[{"link_url":null,"img_url":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","version":"4.0.5"}
     KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
     KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
     KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
@@ -92,6 +92,12 @@
                         </li>
                     
                         <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >TAGS</a>
+                        </li>
+                    
+                        <li class="menu-item">
                             <a class="active"
                                href="/about"
                             >ABOUT</a>
@@ -127,6 +133,12 @@
                     <a class=""
                        href="/archives"
                     >ARCHIVES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags"
+                    >TAGS</a>
                 </li>
             
                 <li class="drawer-menu-item flex-center">
@@ -180,11 +192,11 @@
 </ul>
 <blockquote>
 <p>负责学校部分官方网页的运维，编写小型系统用于学校部分活动的投票、打分等活动，编写该校组织每年用于招纳新生进入组织的纳新网页</p>
-<p>不熟悉Linux命令，没有管理过云服务器的经验，显然我在某些方面的知识点的匮乏使我不适合担任正部长。尽管如此，我依然庆幸自己曾是这里的一员，这是我大学生活中相当重要的一段经历</p>
+<p>不熟悉Linux命令，较少的管理云服务器的经验，显然我在某些方面的知识点的匮乏使我不适合担任正部长。尽管如此，我依然庆幸自己曾是这里的一员，这是我大学生活中相当重要的一段经历</p>
 </blockquote>
 <h1 id="Contact-me-联系我"><a href="#Contact-me-联系我" class="headerlink" title="Contact me | 联系我"></a>Contact me | 联系我</h1><ul>
 <li>GitHub | <a class="link"   target="_blank" rel="noopener" href="https://github.com/QingYuAlive" >QingYuAlive<i class="fas fa-external-link-alt"></i></a></li>
-<li>Gmail | <a class="link"   href="mailto:&#119;&#x6a;&#x69;&#x61;&#100;&#101;&#x37;&#54;&#64;&#103;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#109;" >&#119;&#x6a;&#x69;&#x61;&#100;&#101;&#x37;&#54;&#64;&#103;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#109;<i class="fas fa-external-link-alt"></i></a></li>
+<li>Gmail | <a class="link"   href="mailto:&#119;&#106;&#x69;&#97;&#x64;&#101;&#x37;&#54;&#x40;&#103;&#109;&#x61;&#x69;&#108;&#46;&#99;&#x6f;&#109;" >&#119;&#106;&#x69;&#97;&#x64;&#101;&#x37;&#54;&#x40;&#103;&#109;&#x61;&#x69;&#108;&#46;&#99;&#x6f;&#109;<i class="fas fa-external-link-alt"></i></a></li>
 </ul>
 
                 
@@ -225,11 +237,52 @@
         
             
 
-    <div class="configuration-items-error-tip border-box">
-    <i class="fa-solid fa-circle-exclamation"></i>
-    Please fill in the required configuration items for Valine comment plugin
-</div>
+    <div class="valine-container">
+        <div id="vcomments"></div>
+        <script 
+                src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"
+                async
+                onerror="window.KeepCommentPlugin.loadFailHandle()"
+        ></script>
+        <script 
+                async
+                onerror="window.KeepCommentPlugin.loadFailHandle()"
+        >
+          window.KeepCommentPlugin.initValine = () => {
+            const config = {
+              el: '#vcomments',
+              appId: 'TC37mjsdjXyk3rdyl2EZsFiq-gzGzoHsz',
+              appKey: '0RCj0mbuzdiIq7WFtiYEdc9y',
+              meta: ['nick', 'mail', 'link'],
+              avatar: 'wavatar',
+              enableQQ: true,
+              placeholder: '',
+              lang: 'en'.toLowerCase()
+            }
 
+            if ('https://tc37mjsd.lc-cn-n1-shared.com') {
+              config.serverURLs = 'https://tc37mjsd.lc-cn-n1-shared.com'
+            }
+
+            if (window?.Valine) {
+              new Valine(config)
+              window.KeepCommentPlugin.hideLoading()
+            } else {
+              setTimeout(() => {
+                window.KeepCommentPlugin.initValine()
+              }, 1000)
+            }
+          }
+
+          if ('false' === 'true') {
+            setTimeout(() => {
+              window.KeepCommentPlugin.initValine()
+            }, 1200)
+          } else {
+            window.addEventListener('DOMContentLoaded', window.KeepCommentPlugin.initValine)
+          }
+        </script>
+    </div>
 
 
         
