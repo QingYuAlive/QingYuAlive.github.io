@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="QingYuAlive">
+    
+    <title>
+        
+            基于C++面向对象的多级反馈队列调度算法的模拟实现 |
+        
+        QingYuAlive&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/mylogo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"qingyualive.github.io","root":"/","language":"en","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#6666CC","title":"QingYuAlive's Blog","author":"QingYuAlive","avatar":"/images/mylogo.svg","logo":"/images/mylogo.svg","favicon":"/images/mylogo.svg"},"menu":{"Archives":"/archives","Tags":"/tags","About":"/about"},"first_screen":{"enable":true,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"凡是过往，皆为序章","hitokoto":false},"social_contact":{"enable":true,"links":{"github":"https://github.com/QingYuAlive","weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"facebook":null,"email":"wjiade76@gmail.com"}},"scroll":{"progress_bar":true,"percent":true,"hide_header":true},"home":{"category":false,"tag":true,"announcement":null},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":true,"share":true,"reward":{"enable":false,"img_link":null,"text":null}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"obsidian"},"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":true,"use":"valine","valine":{"appid":"TC37mjsdjXyk3rdyl2EZsFiq-gzGzoHsz","appkey":"0RCj0mbuzdiIq7WFtiYEdc9y","server_urls":"https://tc37mjsd.lc-cn-n1-shared.com","placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":"https://ky93mofp.api.lncldglobal.com","reaction":true,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"jsdelivr"},"pjax":{"enable":false},"footer":{"since":2020,"word_count":false,"icp":{"enable":false,"record_code":null,"url":"https://beian.miit.gov.cn"},"site_deploy":{"enable":false,"provider":"github","url":null},"shields_style":{"enable":false,"custom":[{"link_url":null,"img_url":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","version":"4.0.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/mylogo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               QingYuAlive&#39;s Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a class=""
+                           href="/"
+                        >HOME</a>
+                    </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >ARCHIVES</a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >TAGS</a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >ABOUT</a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            <li class="drawer-menu-item flex-center">
+                <a class=""
+                   href="/"
+                >HOME</a>
+            </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives"
+                    >ARCHIVES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags"
+                    >TAGS</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about"
+                    >ABOUT</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        基于C++面向对象的多级反馈队列调度算法的模拟实现
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/mylogo.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">QingYuAlive</span>
+                                
+                                    <span class="author-badge">Lv1</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2023-12-27 09:57:11</span>
+                <span class="mobile">2023-12-27 09:57</span>
+            </span>
+
+            <span class="meta-info-item post-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc" data-updated="Wed Dec 27 2023 13:58:55 GMT+0800">2023-12-27 13:58:55</span>
+            </span>
+        
+
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/MLFQ/">MLFQ</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/C/">C++</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%A8%A1%E6%8B%9F/">模拟</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/">面向对象</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body">
+                    
+
+                    <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><blockquote>
+<p>在多道程序系统中，进程的数量往往多于处理机的个数，因此进程争用处理机的情况在所难免。处理机调度是对处理机进行调度，即从就绪队列中按照一定的算法（公平、高效的原则）选择一个进程并将处理机分配给它运行，以实现进程并发地执行。</p>
+<p>处理机调度是多道程序操作系统的基础，是操作系统设计的核心问题</p>
+</blockquote>
+<h2 id="处理机调度"><a href="#处理机调度" class="headerlink" title="处理机调度"></a>处理机调度</h2><p>若没有处理机调度，意味着要等到当前运行的进程执行完毕后，下一个进程才能执行，而实际情况中，进程时常需要等待一些外部设备的输入，而外部设备的速度与处理机相比是非常缓慢的，若让处理机总是等待外部设备，则对处理机的资源是极大的浪费。而引进处理机调度后，可以在运行进程等待外部设备时，把处理机调度给其他进程，从而提高处理机的利用率。用一句简单的话来说，就是为了合理地处理计算机的软&#x2F;硬件资源</p>
+<h2 id="调度算法"><a href="#调度算法" class="headerlink" title="调度算法"></a>调度算法</h2><p>出现了调度的概念后，又有了一个问题，即如何调度、应该满足谁、应该让谁等待，这是调度算法所回答的问题。常见的调度算法包括：</p>
+<ul>
+<li>先来先服务（FCFS）调度算法</li>
+<li>短作业优先（SJF）调度算法</li>
+<li>优先级调度算法</li>
+<li>高响应比优先（HRRN）调度算法</li>
+<li>时间片轮转（RR）调度算法</li>
+<li>多级反馈队列（MLFQ）调度算法</li>
+</ul>
+<p>其中，本文着重介绍的是多级反馈队列（MLFQ）调度算法</p>
+<h1 id="算法概述"><a href="#算法概述" class="headerlink" title="算法概述"></a>算法概述</h1><blockquote>
+<p>多级反馈队列调度算法是时间片轮转调度算法和优先级调度算法的综合与发展。通过动态调整进程优先级和时间片大小，多级反馈队列调度算法可以兼顾多方面的系统目标。例如，为提高系统吞吐量和缩短平均周转事件而照顾短进程；为获得较好的I&#x2F;O设备利用率和缩短响应时间而照顾I&#x2F;O型进程；同时，也不必事先估计进程的执行时间</p>
+</blockquote>
+<h2 id="实现思想"><a href="#实现思想" class="headerlink" title="实现思想"></a>实现思想</h2><p>多级反馈队列调度算法的实现思想如下：</p>
+<ol>
+<li>设置多个就绪队列，并为每个队列赋予不同的优先级。第1级队列的优先级最高，第2级队列的优先级次之，其余队列的优先级逐个降低</li>
+<li>赋予各个队列的进程运行时间片的大小各不相同。在优先级越高的队列中，每个进程的时间片就越小。例如，第i+1级队列的时间片要比第i级队列的时间片长1倍</li>
+<li>每个队列都采用FCFS算法。当新进程进入内存后，首先将它放入第1级队列的末尾，按FCFS原则等待调度。当轮到该进程执行时，如它能在该时间片内完成，便可撤离系统。若它在一个时间片结束时尚未完成，调度程序将其转入第2级队列的末尾等待调度；若它在第2级队列中运行一个时间片后仍未完成，再将它放入第3级队列······，以此类推。当进程最后被降到第n级队列后，在第n级队列中便采用时间片轮转方式运行</li>
+<li>按队列优先级调度。仅当第1级队列为空时，才调度第2级队列中的进行运行；仅当第1~i-1级队列均为空时，才会调度第i级队列中的进程运行。若处理机正在执行第i级队列中的进程时，又有新进程进入任何一个优先级较高的队列，此时须立即把正在运行的进程放回到第i级队列的末尾，而把处理机分配给新到的高优先级进程</li>
+</ol>
+<h2 id="算法特征"><a href="#算法特征" class="headerlink" title="算法特征"></a>算法特征</h2><ol>
+<li>对于终端型作业用户：短作业优先</li>
+<li>对于短批处理作业用户：周转时间较短</li>
+<li>对于长批处理作业用户：经过前面几个队列得到部分执行，不会长期得不到处理</li>
+</ol>
+<h1 id="算法实现过程与思路"><a href="#算法实现过程与思路" class="headerlink" title="算法实现过程与思路"></a>算法实现过程与思路</h1><blockquote>
+<p>以下实现的为一个包含三级队列，时间片长度依次为1、2、4的多级反馈队列，且只考虑每次执行整数个单位时间片的情况</p>
+</blockquote>
+<p>函数的功能要求是在根据给定的时间片，利用多级反馈队列调度算法对当前系统中存在的进程在给定的时间片内实现CPU时间的分配与进程调度</p>
+<p>因此一个比较简单的想法是给时间片分段，将整个过程划分为长度等于一个单位时间片的多个小过程，通过模拟时间每次行进一个单位时间片，我们可以轻易地得出每个单位时间片末各进程的各类信息以及各级队列当中所包含的进程情况</p>
+<p><strong>多级反馈队列调度算法中的一个重要的思想是，仅当低于当前层级队列的所有队列同时全部为空队列时，才会调度当前层级队列中的进程运行。这意味着，在实现过程中，我们可以从低级队列往高级队列进行逐步考虑和实现。</strong></p>
+<h2 id="第1级队列"><a href="#第1级队列" class="headerlink" title="第1级队列"></a>第1级队列</h2><p>先考虑第1级队列的实现，由于第1级队列每次能分配的最长时间片的长度为1，因此不需要将这个过程考虑得太过复杂，可以明确的是：</p>
+<ul>
+<li>一旦有新的进程创建成功，它就一定会立即插入到第1级队列的队尾</li>
+<li>由于每次能分配的最长时间片的单位长度为1，在本次给定的总时间片中，第1队列对进程的调度一定是<strong>连贯</strong>的，这里的<strong>连贯</strong>是指<strong>在经过任意长度的时间片的调度与分配后，第1级队列中所有与本次调度相关的进程，要么完成并撤离系统，要么插入到第2级队列的队尾，所有被分配过CPU时间的进程都将立即从第1级队列中弹出</strong>，而不会出现在经过调度运行后当前进程未完成，同时本次运行中当前进程被一次性分配的时间片长度未达到发生队列调度的时间片长度，导致当前进程继续驻留在第1级队列当中等待下一次用户输入时间片来进一步判断进程的调度情况</li>
+</ul>
+<p>认识到了这两点，在实现第1级队列时只需要考虑两种情况，只要第1级队列不空，就能不断地分配单位时间片并调度，同时在本次运行中，被分配过单位时间片后的进程要么转为完成态并从系统中撤离，要么被插入到第2级队列的队尾，无论如何，此进程都将立即从第1级队列中弹出</p>
+<h2 id="第2级队列"><a href="#第2级队列" class="headerlink" title="第2级队列"></a>第2级队列</h2><p>然后考虑第2级队列的实现，第2级队列每次能分配的最长时间片的长度为2，这意味着相比于第1级队列，在本次用户给定的时间片末，可能会出现第2级队列的队首进程仍然滞留在第2级队列的队首，因为我们不知道下一次系统运行时是否仍需继续运行该进程。因此，这里我们需要引入一个额外的变量来解决这个复杂的情况，这个变量需要记录进程单次<strong>连续</strong>上处理机运行的时间，这里的<strong>连续</strong>指的是<strong>本次运行中没有发生因进程调度导致的运行中断</strong>。这样，无论用户将整个系统运行过程分成多少段运行，系统都能正确地进行进程调度。需要注意的是，由于连续运行时间记录的是进程上处理机运行中没有发生进程调度导致中断的时间，因此，一旦整个系统中产生了由较高级队列进程到较低级队列进程的处理机调度，那么较高级队列中的队首进程的连续运行时间必须清0，这意味着他们本次运行过程的终止</p>
+<h2 id="第3级队列"><a href="#第3级队列" class="headerlink" title="第3级队列"></a>第3级队列</h2><p>最后是考虑第3级队列的实现，第3级队列每次能分配的最长时间片的长度为4，这意味着第3级队列所面临的情况与第2级队列一样，可以通过照搬第2级队列的处理方法来解决第3级队列的问题，只不过，与第2级队列不同的，由于第3级队列是最高级的队列，单次分配完4单位长度的时间片后，进程并不会进入到更高一级的队列，而是重新被插入到第3级队列的队尾，因此，我们只需要对第2级队列的处理方式进行简单的修改，便能将其运用到第3级队列上。</p>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><blockquote>
+<p>这里只粘贴重要函数的代码，完整代码请移步<a class="link"   target="_blank" rel="noopener" href="https://github.com/QingYuAlive/OS_Design" >OS多级反馈队列调度算法 (github.com)<i class="fas fa-external-link-alt"></i></a></p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 采用多级反馈队列调度算法运行若干时间片</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Run</span><span class="params">(<span class="type">int</span> time)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 模拟时间流逝</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i != time;) &#123;</span><br><span class="line">        <span class="comment">// 只要第1队队列不空，就持续对第1队队列中的进程调度并分配时间片</span></span><br><span class="line">        <span class="keyword">if</span> (!firstQueue.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">            <span class="comment">// 此时已经进入第1队队列中，如果第2、3队队列不空，说明上次时间片分配给的是第2、3队队列的进程，此时需要将处于第2、3队队列中的进程的持续运行记录清0</span></span><br><span class="line">            <span class="keyword">if</span> (!secondQueue.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">                <span class="keyword">if</span> (secondQueue.<span class="built_in">front</span>().<span class="built_in">getContinuation</span>() != <span class="number">0</span>) &#123;</span><br><span class="line">                    Process *process = &amp;(secondQueue.<span class="built_in">front</span>()); <span class="comment">// 获取第2级队列队头进程</span></span><br><span class="line">                    process-&gt;<span class="built_in">getPCB</span>()-&gt;<span class="built_in">setStatus</span>(<span class="string">&#x27;W&#x27;</span>); <span class="comment">// 发生调度后变为等待态</span></span><br><span class="line">                    process-&gt;<span class="built_in">setContinuation</span>(<span class="number">0</span>); <span class="comment">// 连续运行时间清0</span></span><br><span class="line">                    secondQueue.<span class="built_in">pop</span>();</span><br><span class="line">                    secondQueue.<span class="built_in">push</span>(*process); <span class="comment">// 这一行和上一行的顺序不能调换，他们操作的是同一个process对象</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (!thirdQueue.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">                <span class="keyword">if</span> (thirdQueue.<span class="built_in">front</span>().<span class="built_in">getContinuation</span>() != <span class="number">0</span>) &#123;</span><br><span class="line">                    Process *process = &amp;(thirdQueue.<span class="built_in">front</span>()); <span class="comment">// 获取第3级队列队头进程</span></span><br><span class="line">                    process-&gt;<span class="built_in">getPCB</span>()-&gt;<span class="built_in">setStatus</span>(<span class="string">&#x27;W&#x27;</span>); <span class="comment">// 发生调度后变为等待态</span></span><br><span class="line">                    process-&gt;<span class="built_in">setContinuation</span>(<span class="number">0</span>); <span class="comment">// 连续运行时间清0</span></span><br><span class="line">                    thirdQueue.<span class="built_in">pop</span>();</span><br><span class="line">                    thirdQueue.<span class="built_in">push</span>(*process); <span class="comment">// 这一行和上一行的顺序不能调换，他们操作的是同一个process对象</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            nowTime++; <span class="comment">// 当前时间增加</span></span><br><span class="line">            i++; <span class="comment">// 模拟分配了时间片=1的CPU时间</span></span><br><span class="line">            Process &amp;process = firstQueue.<span class="built_in">front</span>(); <span class="comment">// 获取第1队队列首进程</span></span><br><span class="line">            PCB *pcb = process.<span class="built_in">getPCB</span>(); <span class="comment">// 获取该进程的PCB</span></span><br><span class="line">            pcb-&gt;<span class="built_in">setStatus</span>(<span class="string">&#x27;R&#x27;</span>); <span class="comment">// 进程上处理机运行转为运行态</span></span><br><span class="line">            pcb-&gt;<span class="built_in">setUsedTime</span>(pcb-&gt;<span class="built_in">getUsedTime</span>() + <span class="number">1</span>); <span class="comment">// 已用CPU时间+1</span></span><br><span class="line">            process.<span class="built_in">setContinuation</span>(process.<span class="built_in">getContinuation</span>() + <span class="number">1</span>); <span class="comment">// 连续运行时间+1</span></span><br><span class="line">            <span class="comment">// 如果运行完成</span></span><br><span class="line">            <span class="keyword">if</span> (pcb-&gt;<span class="built_in">getUsedTime</span>() == pcb-&gt;<span class="built_in">getTotalTime</span>()) &#123;</span><br><span class="line">                firstQueue.<span class="built_in">pop</span>(); <span class="comment">// 弹出第1队队列</span></span><br><span class="line">                pcb-&gt;<span class="built_in">setStatus</span>(<span class="string">&#x27;F&#x27;</span>); <span class="comment">// 状态设置为完成态</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// 由于第一队队列的时间片为1，因此不用考虑已占用CPU时间大于需要运行时间的情况，此时考虑该进程未完成的情况</span></span><br><span class="line">                pcb-&gt;<span class="built_in">setStatus</span>(<span class="string">&#x27;W&#x27;</span>); <span class="comment">// 发生进程调度变为等待态</span></span><br><span class="line">                process.<span class="built_in">setContinuation</span>(<span class="number">0</span>); <span class="comment">// 发生调度，需要将进程的持续运行记录清0</span></span><br><span class="line">                secondQueue.<span class="built_in">push</span>(process); <span class="comment">// 放入第2队队列的队尾</span></span><br><span class="line">                firstQueue.<span class="built_in">pop</span>(); <span class="comment">// 弹出第1队队列</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!secondQueue.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">            <span class="comment">// 同上，此时已经进入第2队队列中，如果第3队队列不空，此时需要将处于第3队队列中的进程的持续运行记录清0</span></span><br><span class="line">            <span class="keyword">if</span> (!thirdQueue.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">                <span class="keyword">if</span> (thirdQueue.<span class="built_in">front</span>().<span class="built_in">getContinuation</span>() != <span class="number">0</span>) &#123;</span><br><span class="line">                    Process *process = &amp;(thirdQueue.<span class="built_in">front</span>()); <span class="comment">// 获取第3级队列队首进程</span></span><br><span class="line">                    process-&gt;<span class="built_in">getPCB</span>()-&gt;<span class="built_in">setStatus</span>(<span class="string">&#x27;W&#x27;</span>); <span class="comment">// 获取该进程的PCB</span></span><br><span class="line">                    process-&gt;<span class="built_in">setContinuation</span>(<span class="number">0</span>); <span class="comment">// 连续运行时间清0</span></span><br><span class="line">                    thirdQueue.<span class="built_in">pop</span>();</span><br><span class="line">                    thirdQueue.<span class="built_in">push</span>(*process); <span class="comment">// 这一行和上一行的顺序不能调换，他们操作的是同一个process对象</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            Process *process = &amp;(secondQueue.<span class="built_in">front</span>()); <span class="comment">// 获取第2队队列的队首进程</span></span><br><span class="line">            PCB *pcb = (*process).<span class="built_in">getPCB</span>(); <span class="comment">// 该进程的PCB</span></span><br><span class="line">            <span class="comment">// 只要第2队队列不为空且本次分配的CPU时间片未使用完，就不断对处于第2队队列中的进程进行调度和分配时间片</span></span><br><span class="line">            <span class="keyword">while</span> (!secondQueue.<span class="built_in">empty</span>() &amp;&amp; i != time) &#123;</span><br><span class="line">                i++; <span class="comment">// 模拟分配了时间片=1的CPU时间</span></span><br><span class="line">                nowTime++; <span class="comment">// 当前时间增加</span></span><br><span class="line">                pcb-&gt;<span class="built_in">setStatus</span>(<span class="string">&#x27;R&#x27;</span>); <span class="comment">// 将状态设置为运行态</span></span><br><span class="line">                pcb-&gt;<span class="built_in">setUsedTime</span>(pcb-&gt;<span class="built_in">getUsedTime</span>() + <span class="number">1</span>); <span class="comment">// 当前进程已占用CPU时间增加</span></span><br><span class="line">                process-&gt;<span class="built_in">setContinuation</span>(process-&gt;<span class="built_in">getContinuation</span>() + <span class="number">1</span>); <span class="comment">// 当前进程连续运行时间的记录增加</span></span><br><span class="line">                <span class="comment">// 若进程完成</span></span><br><span class="line">                <span class="keyword">if</span> (pcb-&gt;<span class="built_in">getUsedTime</span>() == pcb-&gt;<span class="built_in">getTotalTime</span>()) &#123;</span><br><span class="line">                    pcb-&gt;<span class="built_in">setStatus</span>(<span class="string">&#x27;F&#x27;</span>); <span class="comment">// 将状态设置为完成态</span></span><br><span class="line">                    secondQueue.<span class="built_in">pop</span>(); <span class="comment">// 从第2队队列中弹出该进程</span></span><br><span class="line">                    process = &amp;(secondQueue.<span class="built_in">front</span>()); <span class="comment">// 切换下一个进程</span></span><br><span class="line">                    pcb = process-&gt;<span class="built_in">getPCB</span>(); <span class="comment">// 获取该进程PCB</span></span><br><span class="line">                    <span class="keyword">continue</span>; <span class="comment">// 跳过后续处理</span></span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 若达到第2队队列所能分配的最大时间片</span></span><br><span class="line">                <span class="keyword">if</span> (process-&gt;<span class="built_in">getContinuation</span>() == secondQueueTime) &#123;</span><br><span class="line">                    pcb-&gt;<span class="built_in">setStatus</span>(<span class="string">&#x27;W&#x27;</span>); <span class="comment">// 发生进程调度状态变为等待态</span></span><br><span class="line">                    process-&gt;<span class="built_in">setContinuation</span>(<span class="number">0</span>); <span class="comment">// 发生进程调度，进程连续运行时间记录清0</span></span><br><span class="line">                    thirdQueue.<span class="built_in">push</span>(*process); <span class="comment">// 将该进程放入第3队队列</span></span><br><span class="line">                    secondQueue.<span class="built_in">pop</span>(); <span class="comment">// 将该进程从第2队队列中弹出</span></span><br><span class="line">                    process = &amp;(secondQueue.<span class="built_in">front</span>()); <span class="comment">// 切换下一个进程</span></span><br><span class="line">                    pcb = process-&gt;<span class="built_in">getPCB</span>(); <span class="comment">// 获取该进程的PCB</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 当其他队列为空时便对第3队队列中的进程进行调度并分配时间片</span></span><br><span class="line">            Process *process = &amp;(thirdQueue.<span class="built_in">front</span>()); <span class="comment">// 获取第3队队列队首的进程</span></span><br><span class="line">            PCB *pcb = (*process).<span class="built_in">getPCB</span>(); <span class="comment">// 获得该进程的PCB</span></span><br><span class="line">            <span class="comment">// 当程序进入到处理第三队队列的进程调度时，这意味着前两个队列都是空的，由于第3队队列是最高级的队列，进程在这将采用时间片轮转的调度算法</span></span><br><span class="line">            <span class="keyword">while</span> (!thirdQueue.<span class="built_in">empty</span>() &amp;&amp; i != time) &#123;</span><br><span class="line">                i++;</span><br><span class="line">                nowTime++;</span><br><span class="line">                pcb-&gt;<span class="built_in">setStatus</span>(<span class="string">&#x27;R&#x27;</span>); <span class="comment">// 状态变为运行态</span></span><br><span class="line">                pcb-&gt;<span class="built_in">setUsedTime</span>(pcb-&gt;<span class="built_in">getUsedTime</span>() + <span class="number">1</span>); <span class="comment">// 当前进程已占用CPU时间增加</span></span><br><span class="line">                process-&gt;<span class="built_in">setContinuation</span>(process-&gt;<span class="built_in">getContinuation</span>() + <span class="number">1</span>); <span class="comment">// 当前进程连续运行时间的记录增加</span></span><br><span class="line">                <span class="comment">// 若进程完成</span></span><br><span class="line">                <span class="keyword">if</span> (pcb-&gt;<span class="built_in">getUsedTime</span>() == pcb-&gt;<span class="built_in">getTotalTime</span>()) &#123;</span><br><span class="line">                    pcb-&gt;<span class="built_in">setStatus</span>(<span class="string">&#x27;F&#x27;</span>); <span class="comment">// 将状态设置为完成态</span></span><br><span class="line">                    thirdQueue.<span class="built_in">pop</span>(); <span class="comment">// 从第3级队列中弹出该进程</span></span><br><span class="line">                    process = &amp;(thirdQueue.<span class="built_in">front</span>()); <span class="comment">// 切换下一个进程</span></span><br><span class="line">                    pcb = process-&gt;<span class="built_in">getPCB</span>();<span class="comment">// 获取该进程的PCB</span></span><br><span class="line">                    <span class="keyword">continue</span>; <span class="comment">// 跳过后续处理</span></span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 若达到第3级队列所能分配的最大时间片</span></span><br><span class="line">                <span class="keyword">if</span> (process-&gt;<span class="built_in">getContinuation</span>() == thirdQueueTime) &#123;</span><br><span class="line">                    pcb-&gt;<span class="built_in">setStatus</span>(<span class="string">&#x27;W&#x27;</span>); <span class="comment">// 发生进程调度状态变为等待态</span></span><br><span class="line">                    process-&gt;<span class="built_in">setContinuation</span>(<span class="number">0</span>); <span class="comment">// 连续运行时间清0</span></span><br><span class="line">                    thirdQueue.<span class="built_in">pop</span>();</span><br><span class="line">                    thirdQueue.<span class="built_in">push</span>(*process); <span class="comment">// 这一行和上一行顺序不能调换，他们操作的是同一个process对象</span></span><br><span class="line">                    process = &amp;(thirdQueue.<span class="built_in">front</span>()); <span class="comment">// 切换下一个进程</span></span><br><span class="line">                    pcb = process-&gt;<span class="built_in">getPCB</span>(); <span class="comment">// 获取该进程的PCB</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 所有进程运行完成</span></span><br><span class="line">            <span class="keyword">if</span> (thirdQueue.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">                nowTime += time - i;</span><br><span class="line">                i = time; <span class="comment">// 直接结束</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    processTable.<span class="built_in">display</span>(); <span class="comment">// 打印进程信息</span></span><br><span class="line">    <span class="built_in">menu</span>(); <span class="comment">// 返回菜单</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h1><blockquote>
+<p>这部分用于记录我在具体实现过程中遇到的问题</p>
+</blockquote>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>采用面向对象的实现方式时，在调用了对象的成员方法对成员变量进行操作时，同时是使用<code>getter</code>和<code>setter</code>成员方法，对于一部分对象来说，他们的<code>getter</code>和<code>setter</code>能正常地获取和修改对象的成员变量，但对于另一部分对象来说，他们的<code>getter</code>和<code>setter</code>是毫无作用的</p>
+<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>程序中存在三个重要的对象：进程控制块（PCB）、进程（Process）、系统进程表（ProcessTable），他们之间存在着很强的关联关系：一个进程对应一个进程控制块，这意味着<code>Process</code>类中会有一个<code>PCB</code>类型的成员变量；系统进程表中包含多个进程，这意味着<code>ProcessTable</code>类中有一个向量<code>vector&lt;Process&gt; processes</code>用来存储系统中的多个进程。在操作上述的这些相关联的对象时，就必须注意深拷贝和浅拷贝的问题，这意味着你不能将<code>getter</code>返回的值赋值到另一个相同类型的变量上，一旦这么做，这个变量只是原本需要操作的对象的一个副本，对该变量的所有操作都不会对原对象产生影响</p>
+<h2 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h2><p>我一共采用了两种方法针对关联对象的深拷贝和浅拷贝问题</p>
+<ul>
+<li>直接改变成员变量的类型，将其改为原类型的指针，这一方法的具体实施体现在了<code>Process</code>类中，我将原本<code>PCB</code>类型成员变量改为了<code>PCB*</code>类型，这样，通过<code>getter</code>返回的指针即使被赋值到另一共变量上后依然能精准地指向原对象</li>
+<li>将<code>getter</code>的返回值设置为引用类型，同时，在具体的代码实现中通过<code>&amp;</code>获取返回值的地址，这样我们便又一次得到了我们需要操作的对象的指针，无论如何赋值，这个指针始终指向我们需要操作的对象</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>不难看出这其实是一个操作系统的课程设计的内容，不可否认的是，这个课程设计极大地引起了我的兴趣以至于我愿意为了它写一篇这样的博客。多级反馈队列调度算法——作为操作系统这门课中的一种相对复杂的算法，它的实现毫无疑问充满了挑战，但当真正去将它付以实践时，我被其设计的巧妙之处所折服，或许，这就是<strong>算法设计的魅力</strong></p>
+
+                </div>
+
+                
+                        
+<div class="post-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="copyright-post-title border-box text-ellipsis">
+                基于C++面向对象的多级反馈队列调度算法的模拟实现
+            </div>
+
+            <div class="copyright-post-link border-box text-ellipsis">
+                2023/12/27/MLFQ/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="copyright-post-author bottom-item">
+                <div class="type">
+                    Author
+                </div>
+                <div class="content">QingYuAlive</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    Published
+                </div>
+                <div class="content">2023-12-27 09:57</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    License
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="Copy copyright info" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/MLFQ/">MLFQ</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/C/">C++</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%A8%A1%E6%8B%9F/">模拟</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/">面向对象</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                            <div class="post-share-container border-box">
+    <ul class="share-list-wrap border-box">
+        <li class="qq share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to QQ"
+        >
+            <i class="fa-brands fa-qq"></i>
+        </li>
+        <li class="wechat share-item border-box flex-center tooltip tooltip-img"
+            data-tooltip-content="Share to WeChat"
+            data-tooltip-img-tip="Scan by WeChat"
+            data-tooltip-img-style="background-color: #fff; top: -10px; padding: 0.6rem 0.6rem 0.1rem 0.6rem;"
+        >
+            <i class="fa-brands fa-weixin"></i>
+        </li>
+        <li class="weibo share-item border-box flex-center tooltip"
+            data-tooltip-content="Share to WeiBo"
+        >
+            <i class="fa-brands fa-weibo"></i>
+        </li>
+    </ul>
+</div>
+
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2023/11/10/my-first-blog/"
+                                   title="我的第一篇博客"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">我的第一篇博客</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+    <div class="comments-container border-box">
+        <div id="comments-anchor" class="comment-area-title border-box">
+            <i class="fas fa-comments"></i>&nbsp;Comments
+        </div>
+        <div class="comment-plugin-fail border-box">
+    <span class="fail-tip">Comment plugin failed to load</span>
+    <button class="reload keep-button">Click to reload</button>
+</div>
+<div class="comment-plugin-loading flex-center border-box">
+    <i class="loading-icon fa-solid fa-spinner fa-spin"></i>
+    <span class="load-tip">Loading comment plugin</span>
+</div>
+<script data-pjax>
+  window.KeepCommentPlugin = {}
+  window.KeepCommentPlugin.hideLoading = () => {
+    const cplDom = document.querySelector('.comments-container .comment-plugin-loading')
+    cplDom.style.display = 'none'
+  }
+  window.KeepCommentPlugin.loadFailHandle = () => {
+    window.KeepCommentPlugin.hideLoading()
+    const cpfDom = document.querySelector('.comments-container .comment-plugin-fail')
+    cpfDom.style.display = 'flex'
+    cpfDom.querySelector('.reload').addEventListener('click', () => {
+      window.location.reload()
+    })
+  }
+</script>
+
+        
+            
+
+    <div class="valine-container">
+        <div id="vcomments"></div>
+        <script 
+                src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"
+                async
+                onerror="window.KeepCommentPlugin.loadFailHandle()"
+        ></script>
+        <script 
+                async
+                onerror="window.KeepCommentPlugin.loadFailHandle()"
+        >
+          window.KeepCommentPlugin.initValine = () => {
+            const config = {
+              el: '#vcomments',
+              appId: 'TC37mjsdjXyk3rdyl2EZsFiq-gzGzoHsz',
+              appKey: '0RCj0mbuzdiIq7WFtiYEdc9y',
+              meta: ['nick', 'mail', 'link'],
+              avatar: 'wavatar',
+              enableQQ: true,
+              placeholder: '',
+              lang: 'en'.toLowerCase()
+            }
+
+            if ('https://tc37mjsd.lc-cn-n1-shared.com') {
+              config.serverURLs = 'https://tc37mjsd.lc-cn-n1-shared.com'
+            }
+
+            if (window?.Valine) {
+              new Valine(config)
+              window.KeepCommentPlugin.hideLoading()
+            } else {
+              setTimeout(() => {
+                window.KeepCommentPlugin.initValine()
+              }, 1000)
+            }
+          }
+
+          if ('false' === 'true') {
+            setTimeout(() => {
+              window.KeepCommentPlugin.initValine()
+            }, 1200)
+          } else {
+            window.addEventListener('DOMContentLoaded', window.KeepCommentPlugin.initValine)
+          }
+        </script>
+    </div>
+
+
+        
+    </div>
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E6%9C%BA%E8%B0%83%E5%BA%A6"><span class="nav-number">1.1.</span> <span class="nav-text">处理机调度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">调度算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%A6%82%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">算法概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%80%9D%E6%83%B3"><span class="nav-number">2.1.</span> <span class="nav-text">实现思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E7%89%B9%E5%BE%81"><span class="nav-number">2.2.</span> <span class="nav-text">算法特征</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E8%BF%87%E7%A8%8B%E4%B8%8E%E6%80%9D%E8%B7%AF"><span class="nav-number">3.</span> <span class="nav-text">算法实现过程与思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC1%E7%BA%A7%E9%98%9F%E5%88%97"><span class="nav-number">3.1.</span> <span class="nav-text">第1级队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC2%E7%BA%A7%E9%98%9F%E5%88%97"><span class="nav-number">3.2.</span> <span class="nav-text">第2级队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC3%E7%BA%A7%E9%98%9F%E5%88%97"><span class="nav-number">3.3.</span> <span class="nav-text">第3级队列</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">遇到的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="nav-number">5.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90"><span class="nav-number">5.2.</span> <span class="nav-text">问题分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3"><span class="nav-number">5.3.</span> <span class="nav-text">问题解决</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2023
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">QingYuAlive</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+
+            
+
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+            <li class="tools-item flex-center go-to-comments">
+                <i class="fas fa-comment"></i>
+                <span class="post-comments-count"></span>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-toggle-theme-mode flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+            <li class="tools-item go-to-comments-tablet flex-center">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E6%9C%BA%E8%B0%83%E5%BA%A6"><span class="nav-number">1.1.</span> <span class="nav-text">处理机调度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">调度算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%A6%82%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">算法概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%80%9D%E6%83%B3"><span class="nav-number">2.1.</span> <span class="nav-text">实现思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E7%89%B9%E5%BE%81"><span class="nav-number">2.2.</span> <span class="nav-text">算法特征</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E8%BF%87%E7%A8%8B%E4%B8%8E%E6%80%9D%E8%B7%AF"><span class="nav-number">3.</span> <span class="nav-text">算法实现过程与思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC1%E7%BA%A7%E9%98%9F%E5%88%97"><span class="nav-number">3.1.</span> <span class="nav-text">第1级队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC2%E7%BA%A7%E9%98%9F%E5%88%97"><span class="nav-number">3.2.</span> <span class="nav-text">第2级队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC3%E7%BA%A7%E9%98%9F%E5%88%97"><span class="nav-number">3.3.</span> <span class="nav-text">第3级队列</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">遇到的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="nav-number">5.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90"><span class="nav-number">5.2.</span> <span class="nav-text">问题分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3"><span class="nav-number">5.3.</span> <span class="nav-text">问题解决</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+<!-- common -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local-search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+            
+<script src="/js/post/copyright-info.js"></script>
+
+        
+
+        <!-- share -->
+        
+            
+<script src="/js/post/share.js"></script>
+
+        
+    
+
+    <!-- category-page -->
+    
+
+    <!-- links-page -->
+    
+
+    <!-- photos-page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>
